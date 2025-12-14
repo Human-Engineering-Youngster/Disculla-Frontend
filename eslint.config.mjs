@@ -9,13 +9,7 @@ export default lint.config(
   prettier,
 
   {
-    ignores: [
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "build/**",
-      "next-env.d.ts",
-    ],
+    ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
   },
 
   {
@@ -64,14 +58,7 @@ export default lint.config(
       "import/order": [
         "error",
         {
-          groups: [
-            "builtin",
-            "external",
-            "internal",
-            "parent",
-            "sibling",
-            "index",
-          ],
+          groups: ["builtin", "external", "internal", "parent", "sibling", "index"],
           "newlines-between": "always",
           alphabetize: { order: "asc", caseInsensitive: true },
           pathGroups: [
@@ -103,8 +90,7 @@ export default lint.config(
             {
               from: "features",
               allow: ["shared"],
-              message:
-                "Features can only import from shared. Use @shared/* imports.",
+              message: "Features can only import from shared. Use @shared/* imports.",
             },
             {
               from: "app",
@@ -114,8 +100,7 @@ export default lint.config(
             {
               from: "shared",
               allow: ["shared"],
-              message:
-                "Shared can only import from shared. No features imports allowed.",
+              message: "Shared can only import from shared. No features imports allowed.",
             },
           ],
         },
