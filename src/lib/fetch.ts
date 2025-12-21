@@ -61,7 +61,7 @@ export async function backendFetch<T>({ schema, url, options = {} }: FetchProps<
   return customFetch({
     schema,
     url,
-    options: { ...options, headers: { Authorization: `Bearer ${token}`, ...options.headers } },
+    options: { ...options, headers: { ...options.headers, Authorization: `Bearer ${token}` } },
   });
 }
 
