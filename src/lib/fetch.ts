@@ -1,3 +1,4 @@
+import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 
 type FetchProps<T> = {
@@ -20,7 +21,6 @@ export const customFetch = async <T>({ schema, url, options = {} }: FetchProps<T
     const response = await fetch(url, {
       ...options,
       headers: {
-        "Content-Type": "application/json",
         ...options.headers,
       },
     });
@@ -51,10 +51,17 @@ export const customFetch = async <T>({ schema, url, options = {} }: FetchProps<T
  * @throws {Error} - フェッチエラーまたはパースエラー
  */
 export async function backendFetch<T>({ schema, url, options = {} }: FetchProps<T>): Promise<T> {
+  const { getToken } = await auth();
+  const token = await getToken();
+
+  if (!token) {
+    throw new Error("認証トークンの取得に失敗しました。");
+  }
+
   return customFetch({
     schema,
     url,
-    options: { ...options, credentials: "include" },
+    options: { ...options, headers: { Authorization: `Bearer ${token}`, ...options.headers } },
   });
 }
 
@@ -67,7 +74,11 @@ export async function backendFetch<T>({ schema, url, options = {} }: FetchProps<
  * @returns {Promise<T>} - パースされたデータ
  * @throws {Error} - フェッチエラーまたはパースエラー
  */
-export async function apiFetch<T>({ schema, url, options = {} }: FetchProps<T>): Promise<T> {
+export async function routeHandlerFetch<T>({
+  schema,
+  url,
+  options = {},
+}: FetchProps<T>): Promise<T> {
   return customFetch({
     schema,
     url,
